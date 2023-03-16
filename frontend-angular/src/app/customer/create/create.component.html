@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Create New Customer</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input
+        formControlName="name"
+        id="name"
+        type="text"
+        class="form-control">
+      <div *ngIf="f['name'].touched && f['name'].invalid" class="alert alert-danger">
+        <div *ngIf="f['name'].errors && f['name'].errors['required']">Name is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        formControlName="email"
+        id="email"
+        type="email"
+        class="form-control">
+      <div *ngIf="f['email'].touched && f['email'].invalid" class="alert alert-danger">
+        <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is required.</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="websiteUrl">Website Url</label>
+      <input
+        formControlName="websiteUrl"
+        id="websiteUrl"
+        type="text"
+        class="form-control">
+      <div *ngIf="f['websiteUrl'].touched && f['websiteUrl'].invalid" class="alert alert-danger">
+        <div *ngIf="f['websiteUrl'].errors && f['websiteUrl'].errors['required']">Website Url is required.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>  </form>
+</div>

@@ -1,0 +1,22 @@
+<div class="container">
+  <h1>Add New Image</h1>
+
+  <form [formGroup]="form">
+
+    <div class="form-group">
+      <label for="image">Image:</label>
+      <input
+        formControlName="image"
+        id="image"
+        type="file"
+        class="form-control"
+        (change)="selectImage($event)"
+      >
+    </div>
+
+    <button class="btn btn-primary" type="submit" (click)="onSubmit()" >Submit</button>
+
+  </form>
+</div>
+
+
