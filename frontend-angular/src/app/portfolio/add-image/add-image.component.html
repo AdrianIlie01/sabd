@@ -1,22 +1,31 @@
-<div class="container">
-  <h1>Add New Image</h1>
+<body class="d-flex min-vh-100 align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4">
+        <div class="text-center">
+          <h1>Add New Image</h1>
+        </div>
 
-  <form [formGroup]="form">
+        <form [formGroup]="form">
 
-    <div class="form-group">
-      <label for="image">Image:</label>
-      <input
-        formControlName="image"
-        id="image"
-        type="file"
-        class="form-control"
-        (change)="selectImage($event)"
-      >
+          <div class="form-group">
+            <label for="image"></label>
+            <input
+              formControlName="image"
+              id="image"
+              type="file"
+              class="form-control"
+              (change)="selectImage($event)"
+            >
+          </div>
+
+          <div class="form-group col">
+            <button class="btn btn-primary mt-1 col-lg-12" type="submit" (click)="onSubmit()">Submit</button>
+          </div>
+         </form>
+
+      </div>
     </div>
-
-    <button class="btn btn-primary" type="submit" (click)="onSubmit()" >Submit</button>
-
-  </form>
-</div>
-
+  </div>
+</body>
 

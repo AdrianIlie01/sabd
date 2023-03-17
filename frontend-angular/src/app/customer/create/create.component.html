@@ -1,43 +1,61 @@
-<div class="container">
-  <h1>Create New Customer</h1>
+<body class="d-flex min-vh-100 align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-4">
 
-  <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="text-center">
+          <h1>Create New Customer</h1>
+        </div>
 
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input
-        formControlName="name"
-        id="name"
-        type="text"
-        class="form-control">
-      <div *ngIf="f['name'].touched && f['name'].invalid" class="alert alert-danger">
-        <div *ngIf="f['name'].errors && f['name'].errors['required']">Name is required.</div>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+
+          <div class="form-floating mb-3">
+            <input
+              formControlName="name"
+              id="name"
+              type="text"
+              class="form-control"
+              placeholder="name"
+            >
+            <label for="name">Name</label>
+            <div *ngIf="f['name'].touched && f['name'].invalid" class="alert alert-danger">
+              <div *ngIf="f['name'].errors && f['name'].errors['required']">name is required.</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input
+              formControlName="email"
+              id="email"
+              type="email"
+              class="form-control"
+              placeholder="email@yahoo.com"
+            >
+            <label for="email">Email</label>
+            <div *ngIf="f['email'].touched && f['email'].invalid" class="alert alert-danger">
+              <div *ngIf="f['email'].errors && f['email'].errors['required']">email is required</div>
+            </div>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input
+              formControlName="websiteUrl"
+              id="websiteUrl"
+              type="text"
+              class="form-control"
+              placeholder="url.com"
+            >
+            <label for="websiteUrl">Website url</label>
+            <div *ngIf="f['websiteUrl'].touched && f['websiteUrl'].invalid" class="alert alert-danger">
+              <div *ngIf="f['websiteUrl'].errors && f['websiteUrl'].errors['required']">website url is required</div>
+            </div>
+          </div>
+
+          <div class="form-group col">
+            <button class="btn btn-primary mt-1 col-lg-12" type="submit" [disabled]="!form.valid">Submit</button>
+          </div>
+        </form>
       </div>
     </div>
-
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input
-        formControlName="email"
-        id="email"
-        type="email"
-        class="form-control">
-      <div *ngIf="f['email'].touched && f['email'].invalid" class="alert alert-danger">
-        <div *ngIf="f['email'].errors && f['email'].errors['required']">Email is required.</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="websiteUrl">Website Url</label>
-      <input
-        formControlName="websiteUrl"
-        id="websiteUrl"
-        type="text"
-        class="form-control">
-      <div *ngIf="f['websiteUrl'].touched && f['websiteUrl'].invalid" class="alert alert-danger">
-        <div *ngIf="f['websiteUrl'].errors && f['websiteUrl'].errors['required']">Website Url is required.</div>
-      </div>
-    </div>
-
-    <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Submit</button>  </form>
-</div>
+  </div>
+</body>

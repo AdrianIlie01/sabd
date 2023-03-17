@@ -44,7 +44,7 @@ export class AddWorkComponent implements OnInit{
     console.log(this.form.value);
     this.customerService.addWork(this.id, this.form.value).subscribe(async (res: any) => {
       console.log('Work added successfully!');
-      await this.router.navigateByUrl('portfolio/list');
+      await this.router.navigateByUrl('customer/list');
     })
   }
 
