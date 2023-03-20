@@ -15,10 +15,12 @@
               type="text"
               class="form-control"
               placeholder="name"
+              [ngClass]="{'is-invalid':submitted && f['name'].errors}"
             >
             <label for="name">Name</label>
-            <div *ngIf="f['name'].touched && f['name'].invalid" class="alert alert-danger">
-              <div *ngIf="f['name'].errors && f['name'].errors['required']">name is required</div>
+            <div *ngIf="submitted && f['name'].errors" class="text-danger">
+              <div *ngIf="submitted && f['name'].errors['required']">Name is required</div>
+              <div *ngIf="submitted && f['name'].errors['minlength']">Name must be at least 3 characters long</div>
             </div>
           </div>
 
@@ -29,10 +31,12 @@
               type="email"
               class="form-control"
               placeholder="email@yahoo.com"
+              [ngClass]="{'is-invalid':submitted && f['email'].errors}"
             >
             <label for="email">Email</label>
-            <div *ngIf="f['email'].touched && f['email'].invalid" class="alert alert-danger">
-              <div *ngIf="f['email'].errors && f['email'].errors['required']">email is required</div>
+            <div *ngIf="submitted && f['email'].errors" class="text-danger">
+              <div *ngIf="submitted && f['email'].errors['required']">Email is required</div>
+              <div *ngIf="submitted && f['email'].errors['pattern']">Invalid email</div>
             </div>
           </div>
 
@@ -43,15 +47,17 @@
               type="text"
               class="form-control"
               placeholder="url.com"
+              [ngClass]="{'is-invalid':submitted && f['websiteUrl'].errors}"
             >
             <label for="websiteUrl">Website url</label>
-            <div *ngIf="f['websiteUrl'].touched && f['websiteUrl'].invalid" class="alert alert-danger">
-              <div *ngIf="f['websiteUrl'].errors && f['websiteUrl'].errors['required']">website url is required</div>
+            <div *ngIf="submitted && f['websiteUrl'].errors" class="text-danger">
+              <div *ngIf="submitted && f['websiteUrl'].errors['required']">Website url is required</div>
+              <div *ngIf="submitted && f['websiteUrl'].errors['pattern']">Invalid url</div>
             </div>
           </div>
 
           <div class="form-group col">
-            <button class="btn btn-primary mt-1 col-lg-12" type="submit" [disabled]="!form.valid">Update</button>
+            <button class="btn btn-primary mt-1 col-lg-12" type="submit">Update</button>
           </div>
         </form>
 

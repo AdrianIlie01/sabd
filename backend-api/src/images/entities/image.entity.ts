@@ -1,10 +1,11 @@
 import {
-    BaseEntity,
+    BaseEntity, BeforeInsert,
     Column, CreateDateColumn,
     Entity, ManyToOne,
     PrimaryGeneratedColumn, UpdateDateColumn
 } from 'typeorm';
 import {PortfolioEntity} from "../../portfolio/entities/portfolio.entity";
+import {BadRequestException} from "@nestjs/common";
 
 @Entity('images')
 export class ImageEntity extends BaseEntity {
@@ -26,5 +27,12 @@ export class ImageEntity extends BaseEntity {
     @UpdateDateColumn()
     update_date: Date;
 
+    @BeforeInsert()
+    async imageUpload(){
+        if (this.portfolio === null) {
+            throw new BadRequestException('This portfolio does not exist!');
+        }
+
+    }
 
 }

@@ -1,3 +1,5 @@
+import {PortfolioEntity} from "../../portfolio/entities/portfolio.entity";
+
 export class CreateImageDto {
-    portfolioId: string;
+    portfolio: PortfolioEntity;
 }

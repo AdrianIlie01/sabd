@@ -2,6 +2,8 @@ import {BadRequestException, Injectable} from '@nestjs/common';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import {PortfolioEntity} from "./entities/portfolio.entity";
 import {ImagesService} from "../images/images.service";
+import {CreatePortfolioDto} from "./dto/create-portfolio.dto";
+import {CreateImageDto} from "../images/dto/create-image.dto";
 
 @Injectable()
 export class PortfolioService {
@@ -9,15 +11,37 @@ export class PortfolioService {
       private readonly imageService: ImagesService,
 
   ) {}
-  async uploadImage(file: Express.Multer.File, id: string) {
+  async uploadImage(id: string, file: Express.Multer.File, createImageDto: CreateImageDto) {
     try {
+
       const portfolio = await PortfolioEntity.findOne({
         where: { id: id }
       });
 
-      return await this.imageService.uploadImage(file, portfolio.id);
+      createImageDto.portfolio = portfolio;
+      const image = await this.imageService.uploadImage(file, createImageDto);
+
+      return image;
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  async create(createPortfolioDto: CreatePortfolioDto) {
+    try {
+      const { title, description, isVisible, website_url, customer } = createPortfolioDto;
+
+      const portfolio = new PortfolioEntity();
+
+      portfolio.title = title;
+      portfolio.description = description;
+      portfolio.is_visible = isVisible;
+      portfolio.customer = customer;
+      portfolio.website_url = website_url;
+
+      return await portfolio.save();
+    } catch (e) {
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -28,7 +52,7 @@ export class PortfolioService {
       console.log(portfolio);
       return portfolio;
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -38,7 +62,7 @@ export class PortfolioService {
         where: { id: id}
       })
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -53,7 +77,7 @@ export class PortfolioService {
       portfolio.is_visible = isVisible;
       return await portfolio.save();
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -64,7 +88,9 @@ export class PortfolioService {
         where: {id: id}
       });
 
-      const deleteImage = await this.imageService.remove(id);
+      const deleteImage = await Promise.all(
+          await this.imageService.remove(id)
+      );
       const deletePortfolio = await portfolio.remove();
 
       return {
@@ -72,7 +98,7 @@ export class PortfolioService {
          deletePortfolio
       };
     } catch (e) {
-      return new BadRequestException(e.detail);
+      throw new BadRequestException(e.message);
     }
   }
 }

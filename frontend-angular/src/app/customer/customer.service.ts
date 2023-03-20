@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
+import {catchError, map, Observable, throwError} from "rxjs";
 import {Customer} from "./customer";
 import {Portfolio} from "../portfolio/portfolio";
 
@@ -25,7 +25,7 @@ export class CustomerService {
       )
   }
 
-  create(customer: Customer): Observable<any> {
+  create(customer: Customer) {
 
     return this.httpClient.post(this.apiURL + '/customer/', JSON.stringify(customer), this.httpOptions)
       .pipe(
@@ -41,6 +41,18 @@ export class CustomerService {
       )
   }
 
+  findByName(name:string) {
+
+    return this.httpClient.get(this.apiURL + '/customer/')
+      .pipe(map((data) => {
+        catchError(this.errorHandler)
+        return data;
+      }));
+
+      // .pipe(
+      // catchError(this.errorHandler)
+      // )
+  }
 
   update(id:string, customer:Customer) {
 

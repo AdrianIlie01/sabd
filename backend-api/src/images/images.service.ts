@@ -1,24 +1,24 @@
 import {BadRequestException, Injectable} from '@nestjs/common';
 import {ImageEntity} from "./entities/image.entity";
-import {PortfolioEntity} from "../portfolio/entities/portfolio.entity";
-import {path} from "../shared/savedImagesPath";
+import {CreateImageDto} from "./dto/create-image.dto";
+import {existsSync, unlinkSync} from "fs";
 
 @Injectable()
 export class ImagesService {
 
-  async uploadImage(file: Express.Multer.File, id: string) {
+  async uploadImage(file: Express.Multer.File, createImageDto: CreateImageDto) {
     try {
-      const portfolio = await PortfolioEntity.findOne({
-        where: {id: id}
-      });
+      const { portfolio } = createImageDto;
 
       const image = new ImageEntity();
+
       image.portfolio = portfolio;
       image.file_name = file.filename;
-      image.path = path;
+      image.path = file.path;
+
       return await image.save();
     } catch (e) {
-      throw new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -33,13 +33,15 @@ export class ImagesService {
         where: { portfolio : { id: id } }
       });
 
-      const deletedImages = images.map( async (image: ImageEntity) => {
+      return images.map( async (image: ImageEntity) => {
+        const filePath = image.path;
+        if (existsSync(filePath)) {
+          await unlinkSync(filePath);
+        }
         return await image.remove();
       });
-
-      return deletedImages;
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 }

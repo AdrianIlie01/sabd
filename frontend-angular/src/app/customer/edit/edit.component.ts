@@ -14,6 +14,7 @@ export class EditComponent implements OnInit {
   id!: string;
   customer!: Customer;
   form!: FormGroup;
+  submitted = false;
 
   constructor(
     public customerService: CustomerService,
@@ -29,9 +30,20 @@ export class EditComponent implements OnInit {
     });
 
     this.form = new FormGroup({
-      name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
-      websiteUrl: new FormControl('', Validators.required),
+      name: new FormControl('', [
+          Validators.required,
+          Validators.minLength(3),
+        ]
+      ),
+      email: new FormControl('', [
+        Validators.required,
+        // checks for @x.com
+        Validators.pattern(/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/),
+      ]),
+      websiteUrl: new FormControl('', [
+        Validators.required,
+        Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'),
+      ]),
     });
   }
 
@@ -40,7 +52,11 @@ export class EditComponent implements OnInit {
   }
 
   submit(){
-    console.log(this.form.value);
+    this.submitted = true
+
+    if (this.form.invalid) {
+      return;
+    }
     this.customerService.update(this.id, this.form.value).subscribe(async (res: any) => {
       console.log('Customer updated successfully!');
       await this.router.navigateByUrl('customer/list');

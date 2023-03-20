@@ -5,7 +5,7 @@ import {
     PrimaryGeneratedColumn, Unique, UpdateDateColumn,
 } from 'typeorm';
 import {IsEmail, IsNotEmpty, IsUrl} from "class-validator";
-import {BadRequestException} from "@nestjs/common";
+import {BadRequestException, HttpException, HttpStatus} from "@nestjs/common";
 import {PortfolioEntity} from "../../portfolio/entities/portfolio.entity";
 
 @Entity('customer')

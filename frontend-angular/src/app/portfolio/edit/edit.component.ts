@@ -14,6 +14,7 @@ export class EditComponent implements OnInit {
   id!: string;
   portfolio!: Portfolio;
   form!: FormGroup;
+  submitted = false;
 
   constructor(
     public portfolioService: PortfolioService,
@@ -40,8 +41,10 @@ export class EditComponent implements OnInit {
   }
 
   submit(){
-    console.log(this.form.value);
-    console.log(this.portfolio);
+    this.submitted = true
+    if (this.form.invalid) {
+      return;
+    }
     this.portfolioService.update(this.id, this.form.value).subscribe(async (res: any) => {
       console.log('Portfolio updated successfully!');
       await this.router.navigateByUrl('portfolio/list');

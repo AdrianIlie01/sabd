@@ -16,6 +16,8 @@ export class AddWorkComponent implements OnInit{
   customer!: Customer;
   portfolio!: Portfolio;
   form!: FormGroup;
+  submitted = false;
+
 
   constructor(
     public customerService: CustomerService,
@@ -41,7 +43,10 @@ export class AddWorkComponent implements OnInit{
   }
 
   submit(){
-    console.log(this.form.value);
+    this.submitted = true
+    if (this.form.invalid) {
+      return;
+    }
     this.customerService.addWork(this.id, this.form.value).subscribe(async (res: any) => {
       console.log('Work added successfully!');
       await this.router.navigateByUrl('customer/list');

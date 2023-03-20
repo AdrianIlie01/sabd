@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpException} from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -14,6 +14,8 @@ export class CustomerController {
       const customer = await this.customerService.create(createCustomerDto);
       return res.status(HttpStatus.CREATED).json(customer);
     } catch (e) {
+      console.log('controller');
+      console.log(e);
       return res.status(HttpStatus.BAD_REQUEST).json(e);
     }
   }
@@ -52,6 +54,8 @@ export class CustomerController {
   async remove(@Res() res, @Param('id') id: string) {
     try {
       const customer = await this.customerService.remove(id);
+      console.log('controller');
+      console.log(customer);
       return res.status(HttpStatus.OK).json(customer);
     } catch (e) {
       return res.status(HttpStatus.BAD_REQUEST).json(e);
@@ -62,6 +66,16 @@ export class CustomerController {
   async addWork(@Res() res, @Param('id') id: string, @Body() createPortfolioDto: CreatePortfolioDto) {
     try {
       const customer = await this.customerService.addWork(id, createPortfolioDto);
+      return res.status(HttpStatus.OK).json(customer);
+    } catch (e) {
+      return res.status(HttpStatus.BAD_REQUEST).json(e);
+    }
+  }
+
+  @Get('name/:name')
+  async findByName(@Res() res, @Param('name') name: string) {
+    try {
+      const customer = await this.customerService.findByName(name);
       return res.status(HttpStatus.OK).json(customer);
     } catch (e) {
       return res.status(HttpStatus.BAD_REQUEST).json(e);

@@ -15,10 +15,11 @@
               type="text"
               class="form-control"
               placeholder="title"
+              [ngClass]="{'is-invalid':submitted && f['title'].errors}"
             >
             <label for="title">Title</label>
-            <div *ngIf="f['title'].touched && f['title'].invalid" class="alert alert-danger">
-              <div *ngIf="f['title'].errors && f['title'].errors['required']">title is required</div>
+            <div *ngIf="submitted && f['title'].errors" class="text-danger">
+              <div *ngIf="submitted && f['title'].errors['required']">Title is required</div>
             </div>
           </div>
 
@@ -29,16 +30,16 @@
                 type="text"
                 class="form-control"
                 placeholder="description"
+                [ngClass]="{'is-invalid':submitted && f['description'].errors}"
               >
             <label for="description" class="form-label col-form-label">Description</label>
-
-            <div *ngIf="f['description'].touched && f['description'].invalid" class="alert alert-danger">
-              <div *ngIf="f['description'].errors && f['description'].errors['required']">description is required</div>
+            <div *ngIf="submitted && f['description'].errors" class="text-danger">
+              <div *ngIf="submitted && f['description'].errors['required']">Description is required</div>
             </div>
           </div>
 
               <div class="form-group col">
-                <button class="btn btn-primary mt-1 col-lg-12" type="submit" (click)="submit()" [disabled]="!form.valid">Update</button>
+                <button class="btn btn-primary mt-1 col-lg-12" type="submit" (click)="submit()">Update</button>
               </div>
         </form>
 

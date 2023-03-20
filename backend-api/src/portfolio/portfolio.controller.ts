@@ -8,13 +8,14 @@ import {
   Delete,
   UseInterceptors,
   HttpException,
-  HttpStatus, UploadedFile, Res, Header
+  HttpStatus, UploadedFile, Res, Header, BadRequestException
 } from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import {FileInterceptor} from "@nestjs/platform-express";
 import {diskStorage} from "multer";
 import {path} from "../shared/savedImagesPath";
+import {CreateImageDto} from "../images/dto/create-image.dto";
 
 @Controller('portfolio')
 export class PortfolioController {
@@ -70,10 +71,19 @@ export class PortfolioController {
       }),
   )
   @Header('Content-Type', 'multipart/form-data')
-  async uploadImage(@Res() res, @Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+  async uploadImage(@Res() res,
+                    @Param('id') id: string,
+                    @UploadedFile() file: Express.Multer.File,
+                    @Body() createImageDto: CreateImageDto
+  ) {
     try {
-      const upload = await this.portfolioService.uploadImage(file, id);
-      // res.set({ 'Content-Type': 'multipart/form-data'});
+
+      const portfolio = await this.portfolioService.findOne(id);
+      if (!portfolio) {
+        throw new BadRequestException('Invalid portfolio ID');
+      }
+
+      const upload = await this.portfolioService.uploadImage(id, file, createImageDto);
       return res.status(HttpStatus.OK).json(upload);
     } catch (e) {
       return res.status(HttpStatus.BAD_REQUEST).json(e);

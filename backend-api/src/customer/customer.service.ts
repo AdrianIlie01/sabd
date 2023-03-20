@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import {CustomerEntity} from "./entities/customer.entity";
@@ -22,7 +22,7 @@ export class CustomerService {
       console.log(savedCustomer);
       return await savedCustomer;
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -37,7 +37,7 @@ export class CustomerService {
       console.log(customer);
       return customer;
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -47,7 +47,20 @@ export class CustomerService {
         where: { id: id }
       })
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  async findByName(name: string) {
+    try {
+      const customer = await CustomerEntity.find({
+        where: { name: name }
+      })
+      console.log(typeof customer);
+      console.log(customer);
+      return customer;
+    } catch (e) {
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -62,7 +75,7 @@ export class CustomerService {
       customer.website_url = websiteUrl;
       return await customer.save();
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 
@@ -95,27 +108,23 @@ export class CustomerService {
         deletedCustomer
       }
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
   async addWork(id: string, createPortfolioDto: CreatePortfolioDto) {
     try {
-      const { title, description, isVisible } = createPortfolioDto;
 
       const customer = await CustomerEntity.findOne({
         where: {id: id}
       });
 
-      const portfolio = new PortfolioEntity();
-      portfolio.title =title;
-      portfolio.description = description;
-      portfolio.is_visible = isVisible;
-      portfolio.customer = customer;
-      portfolio.website_url = customer.website_url;
+      createPortfolioDto.customer = customer;
+      createPortfolioDto.website_url = customer.website_url;
+      const portfolio = await this.portfolioService.create(createPortfolioDto);
 
-      return  await portfolio.save();
+      return await portfolio;
     } catch (e) {
-      return new BadRequestException(e);
+      throw new BadRequestException(e.message);
     }
   }
 }
