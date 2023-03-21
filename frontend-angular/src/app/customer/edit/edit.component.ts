@@ -17,7 +17,7 @@ export class EditComponent implements OnInit {
   submitted = false;
 
   constructor(
-    public customerService: CustomerService,
+    private customerService: CustomerService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -25,23 +25,26 @@ export class EditComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['customerId'];
+    console.log(this.id);
     this.customerService.find(this.id).subscribe((data: Customer)=>{
       this.customer = data;
     });
 
     this.form = new FormGroup({
-      name: new FormControl('', [
-          Validators.required,
+      name: new FormControl('', {
+        validators: [
           Validators.minLength(3),
+        ],
+        asyncValidators: [
+          this.customerService.nameValidUpdate(this.id),
         ]
+        }
       ),
       email: new FormControl('', [
-        Validators.required,
         // checks for @x.com
         Validators.pattern(/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/),
       ]),
       websiteUrl: new FormControl('', [
-        Validators.required,
         Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'),
       ]),
     });
@@ -53,6 +56,18 @@ export class EditComponent implements OnInit {
 
   submit(){
     this.submitted = true
+
+    if (this.f['name']?.value === '') {
+      this.form.get('name')?.setValue(this.customer.name);
+    }
+
+    if (this.f['email']?.value === '') {
+      this.form.get('email')?.setValue(this.customer.email);
+    }
+
+    if (this.f['websiteUrl']?.value === '') {
+      this.form.get('websiteUrl')?.setValue(this.customer.website_url);
+    }
 
     if (this.form.invalid) {
       return;

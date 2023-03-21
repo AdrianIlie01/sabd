@@ -40,14 +40,6 @@ export class CustomerEntity extends BaseEntity {
 
     }
 
-    @BeforeUpdate()
-    async updateName(){
-        const customer = await CustomerEntity.find({where:{name: this.name}});
-        if (customer.length > 0) {
-            throw new BadRequestException('This customer name already exists');
-        }
-    }
-
     @BeforeInsert()
     insert() {
         if (this.name !== this.name.trim() || this.email !== this.email.trim() || this.website_url !== this.website_url.trim()) {

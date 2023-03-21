@@ -46,14 +46,6 @@ export class PortfolioEntity extends BaseEntity {
 
     }
 
-    @BeforeUpdate()
-    async updateTitle(){
-        const portfolio = await CustomerEntity.find({where:{name: this.title}});
-        if (portfolio.length > 0) {
-            throw new BadRequestException('This portfolio title already exists');
-        }
-    }
-
     @BeforeInsert()
     insert() {
         if (this.title !== this.title.trim() || this.description !== this.description.trim()) {

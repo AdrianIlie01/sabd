@@ -31,8 +31,12 @@ export class EditComponent implements OnInit {
     });
 
     this.form = new FormGroup({
-      title: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
+      title: new FormControl('', {
+        asyncValidators: [
+          this.portfolioService.validateTitleUpdate(this.id)
+        ]
+      }),
+      description: new FormControl('')
     });
   }
 
@@ -42,7 +46,17 @@ export class EditComponent implements OnInit {
 
   submit(){
     this.submitted = true
+
+    if (this.f['title']?.value === '') {
+      this.form.get('title')?.setValue(this.portfolio.title);
+    }
+
+    if (this.f['description']?.value === '') {
+      this.form.get('description')?.setValue(this.portfolio.description);
+    }
+
     if (this.form.invalid) {
+      console.log('Please fix the errors in the form');
       return;
     }
     this.portfolioService.update(this.id, this.form.value).subscribe(async (res: any) => {

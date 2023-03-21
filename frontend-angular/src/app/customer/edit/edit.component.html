@@ -19,8 +19,8 @@
             >
             <label for="name">Name</label>
             <div *ngIf="submitted && f['name'].errors" class="text-danger">
-              <div *ngIf="submitted && f['name'].errors['required']">Name is required</div>
               <div *ngIf="submitted && f['name'].errors['minlength']">Name must be at least 3 characters long</div>
+              <div *ngIf="submitted && f['name'].errors['nameValidUpdate']">This name already exist. Please try another name</div>
             </div>
           </div>
 
@@ -35,7 +35,6 @@
             >
             <label for="email">Email</label>
             <div *ngIf="submitted && f['email'].errors" class="text-danger">
-              <div *ngIf="submitted && f['email'].errors['required']">Email is required</div>
               <div *ngIf="submitted && f['email'].errors['pattern']">Invalid email</div>
             </div>
           </div>
@@ -51,7 +50,6 @@
             >
             <label for="websiteUrl">Website url</label>
             <div *ngIf="submitted && f['websiteUrl'].errors" class="text-danger">
-              <div *ngIf="submitted && f['websiteUrl'].errors['required']">Website url is required</div>
               <div *ngIf="submitted && f['websiteUrl'].errors['pattern']">Invalid url</div>
             </div>
           </div>

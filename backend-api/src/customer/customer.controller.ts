@@ -43,6 +43,8 @@ export class CustomerController {
   @Patch(':id')
   async update(@Res() res, @Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
     try {
+      console.log(typeof updateCustomerDto.email);
+      console.log(updateCustomerDto.email);
       const customer = await this.customerService.update(id, updateCustomerDto);
       return res.status(HttpStatus.OK).json(customer);
     } catch (e) {

@@ -110,6 +110,16 @@ export class PortfolioController {
     }
   }
 
+  @Get('title/:title')
+  async findByName(@Res() res, @Param('title') title: string) {
+    try {
+      const portfolio = await this.portfolioService.findByTitle(title);
+      return res.status(HttpStatus.OK).json(portfolio);
+    } catch (e) {
+      return res.status(HttpStatus.BAD_REQUEST).json(e);
+    }
+  }
+
   @Patch(':id')
   async update(@Res() res, @Param('id') id: string, @Body() updatePortfolioDto: UpdatePortfolioDto) {
     try {

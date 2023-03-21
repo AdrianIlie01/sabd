@@ -1,10 +1,10 @@
-import {IsNotEmpty} from "class-validator";
+import { IsOptional } from "class-validator";
 
 export class UpdatePortfolioDto {
 
-    @IsNotEmpty({message: 'The title is required'})
+    @IsOptional( { message: 'Title is optional' })
     title: string;
-    @IsNotEmpty({message: 'The description is required'})
+    @IsOptional({ message: 'Description is optional' })
     description: string;
     isVisible: boolean;
 }

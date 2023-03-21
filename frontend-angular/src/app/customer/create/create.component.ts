@@ -1,8 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormControl,
+  FormGroup,
+  Validators
+} from "@angular/forms";
 import {Router} from "@angular/router";
 import {CustomerService} from "../customer.service";
-import {Customer} from "../customer";
+import {map} from "rxjs";
 
 @Component({
   selector: 'app-create',
@@ -12,20 +18,24 @@ import {Customer} from "../customer";
 export class CreateComponent implements OnInit {
 
   form!: FormGroup;
-  customer: Customer[] = [];
   submitted = false;
 
   constructor(
-    public customerService: CustomerService,
+    private customerService: CustomerService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      name: new FormControl('', [
+      this.form = new FormGroup({
+      name: new FormControl('', {
+        validators: [
        Validators.required,
-       Validators.minLength(3),
+       Validators.minLength(3)
+        ],
+        asyncValidators: [
+          this.customerService.validateName(),
         ]
+        }
       ),
       email: new FormControl('', [
         Validators.required,

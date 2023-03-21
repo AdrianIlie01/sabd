@@ -1,4 +1,4 @@
-import {BadRequestException, HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import {CustomerEntity} from "./entities/customer.entity";
@@ -67,12 +67,21 @@ export class CustomerService {
   async update(id: string, updateCustomerDto: UpdateCustomerDto) {
     try {
       const { name, email, websiteUrl } = updateCustomerDto;
+
       const customer = await CustomerEntity.findOne({
         where: {id: id}
-      })
-      customer.name = name;
-      customer.email = email;
-      customer.website_url = websiteUrl;
+      });
+
+      const customerName = customer.name;
+      const customerEmail = customer.email;
+      const customerWebsite = customer.website_url;
+
+      console.log(typeof email);
+
+      typeof name !== 'undefined'? customer.name = name: customer.name = customerName;
+      typeof email !== 'undefined'? customer.email = email: customer.email = customerEmail;
+      typeof websiteUrl !== 'undefined'? customer.website_url = websiteUrl: customer.website_url = customerWebsite;
+
       return await customer.save();
     } catch (e) {
       throw new BadRequestException(e.message);

@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, AsyncValidatorFn, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CustomerService} from "../customer.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Portfolio} from "../../portfolio/portfolio";
 import {Customer} from "../customer";
+import {map} from "rxjs";
+import {PortfolioService} from "../../portfolio/portfolio.service";
 
 @Component({
   selector: 'app-add-work',
@@ -21,6 +23,7 @@ export class AddWorkComponent implements OnInit{
 
   constructor(
     public customerService: CustomerService,
+    private portfolioService: PortfolioService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -33,7 +36,10 @@ export class AddWorkComponent implements OnInit{
     });
 
     this.form = new FormGroup({
-      title: new FormControl('', Validators.required),
+      title: new FormControl('', {
+        validators: [ Validators.required ],
+        asyncValidators: [this.portfolioService.validateTitle()]
+      }),
       description: new FormControl('', Validators.required),
     });
   }
@@ -41,6 +47,7 @@ export class AddWorkComponent implements OnInit{
   get f(){
     return this.form.controls;
   }
+
 
   submit(){
     this.submitted = true

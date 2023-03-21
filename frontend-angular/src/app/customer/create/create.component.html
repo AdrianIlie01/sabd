@@ -22,6 +22,7 @@
             <div *ngIf="submitted && f['name'].errors" class="text-danger">
               <div *ngIf="submitted && f['name'].errors['required']">Name is required</div>
               <div *ngIf="submitted && f['name'].errors['minlength']">Name must be at least 3 characters long</div>
+              <div *ngIf="submitted && f['name'].errors['validateName']">This name already exist. Please try another name</div>
             </div>
           </div>
 

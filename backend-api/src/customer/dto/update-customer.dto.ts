@@ -1,15 +1,16 @@
-import {IsEmail, IsNotEmpty, IsUrl} from "class-validator";
+import {IsEmail, IsOptional, IsUrl} from "class-validator";
 
 export class UpdateCustomerDto {
 
-    @IsNotEmpty({message: 'The name is required'})
+    @IsOptional( { message: 'Name is optional' })
     name: string;
 
-    @IsEmail({}, {message: 'Invalid email'})
-    @IsNotEmpty({ message: 'The email is required' })
+    @IsOptional({ message: 'Email is optional' })
+    @IsEmail({}, {message: 'Invalid email update'})
     email: string;
 
     @IsUrl({}, { message: 'Invalid URL' })
+    @IsOptional({ message: 'WebsiteUrl is optional' })
     websiteUrl: string;
 
 }

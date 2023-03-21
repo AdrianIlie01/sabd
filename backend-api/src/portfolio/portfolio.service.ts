@@ -66,15 +66,35 @@ export class PortfolioService {
     }
   }
 
+  async findByTitle(title: string) {
+    try {
+      const portfolio = await PortfolioEntity.find({
+        where: { title: title }
+      });
+      console.log(portfolio);
+
+      return portfolio;
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   async update(id: string, updatePortfolioDto: UpdatePortfolioDto) {
     try {
       const { title, description, isVisible } = updatePortfolioDto;
       const portfolio = await PortfolioEntity.findOne({
         where: {id: id}
       });
-      portfolio.title = title;
-      portfolio.description = description;
-      portfolio.is_visible = isVisible;
+
+      const portfolioTitle = portfolio.title;
+      const portfolioDescription = portfolio.description;
+      const portfolioIsVisible = portfolio.is_visible;
+
+      typeof title !== 'undefined'? portfolio.title = title: portfolio.title = portfolioTitle;
+      typeof description !== 'undefined'? portfolio.description = description: portfolio.description = portfolioDescription;
+      typeof isVisible !== 'undefined'? portfolio.is_visible = isVisible: portfolio.is_visible = portfolioIsVisible;
+
+
       return await portfolio.save();
     } catch (e) {
       throw new BadRequestException(e.message);
