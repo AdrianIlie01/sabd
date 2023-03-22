@@ -8,7 +8,7 @@ import {
   Delete,
   UseInterceptors,
   HttpException,
-  HttpStatus, UploadedFile, Res, Header, BadRequestException
+  HttpStatus, UploadedFile, Res, Header
 } from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
@@ -77,11 +77,6 @@ export class PortfolioController {
                     @Body() createImageDto: CreateImageDto
   ) {
     try {
-
-      const portfolio = await this.portfolioService.findOne(id);
-      if (!portfolio) {
-        throw new BadRequestException('Invalid portfolio ID');
-      }
 
       const upload = await this.portfolioService.uploadImage(id, file, createImageDto);
       return res.status(HttpStatus.OK).json(upload);
