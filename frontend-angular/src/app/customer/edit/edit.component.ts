@@ -55,7 +55,7 @@ export class EditComponent implements OnInit {
   }
 
   submit(){
-    this.submitted = true
+    this.submitted = true;
 
     if (this.f['name']?.value === '') {
       this.form.get('name')?.setValue(this.customer.name);

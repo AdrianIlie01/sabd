@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {Portfolio} from "./portfolio";
-import {AbstractControl, AsyncValidatorFn} from "@angular/forms";
-import {Customer} from "../customer/customer";
+import {AbstractControl, AsyncValidatorFn, ValidationErrors} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +52,7 @@ export class PortfolioService {
 
   // custom async validator for unique title
   validateTitle():AsyncValidatorFn  {
-    return (control: AbstractControl) => {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return this.findByTitle(control.value)
         .pipe(
           map((data) => {
@@ -63,30 +62,12 @@ export class PortfolioService {
     }
   }
 
-  validateTitleUpdate(id: string): AsyncValidatorFn  {
-    return (control: AbstractControl) => {
-      let portfolio: Portfolio[] = [];
-      let validTitle: boolean = true;
-
-      this.find(id).subscribe((data: Portfolio[]) => {
-        portfolio = data;
-      });
-      return this.findByTitle(control.value)
-        .pipe(
-          map((data) => {
-            data.map((searchPortfolio: Portfolio) => {
-              portfolio.map((portfolio:Portfolio) => {
-                if (!(searchPortfolio.title === portfolio.title)) {
-                  console.log('another portfolio has this title');
-                  validTitle = false;
-                } else {
-                  validTitle = true;
-                }
-              })
-              return !validTitle ? {'validateTitle': 'This title is not available'} : {};
-            })
-            console.log(validTitle);
-            return !validTitle ? {'validateTitle': 'This title is not available'} : {};
+  titleValidUpdate(id: string): AsyncValidatorFn  {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.findByTitle(control.value).pipe(
+          map((portfolio: Portfolio[]) => {
+            const matchingTitle = portfolio.filter((portfolio: Portfolio) => portfolio.id !== id);
+            return matchingTitle.length > 0 ? {'titleValidUpdate': 'This title is not available'} : null;
           })
         );
     }

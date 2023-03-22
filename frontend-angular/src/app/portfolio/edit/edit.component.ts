@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Portfolio} from "../portfolio";
 import {PortfolioService} from "../portfolio.service";
@@ -33,7 +33,7 @@ export class EditComponent implements OnInit {
     this.form = new FormGroup({
       title: new FormControl('', {
         asyncValidators: [
-          this.portfolioService.validateTitleUpdate(this.id)
+          this.portfolioService.titleValidUpdate(this.id)
         ]
       }),
       description: new FormControl('')
@@ -45,7 +45,7 @@ export class EditComponent implements OnInit {
   }
 
   submit(){
-    this.submitted = true
+    this.submitted = true;
 
     if (this.f['title']?.value === '') {
       this.form.get('title')?.setValue(this.portfolio.title);
@@ -56,7 +56,6 @@ export class EditComponent implements OnInit {
     }
 
     if (this.form.invalid) {
-      console.log('Please fix the errors in the form');
       return;
     }
     this.portfolioService.update(this.id, this.form.value).subscribe(async (res: any) => {

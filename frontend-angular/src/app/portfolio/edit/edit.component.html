@@ -19,7 +19,7 @@
             >
             <label for="title">Title</label>
             <div *ngIf="submitted && f['title'].errors" class="text-danger">
-              <div *ngIf="submitted && f['title'].errors['validateTitleUpdate']">This title already exist. Please try another title</div>
+              <div *ngIf="submitted && f['title'].errors['titleValidUpdate']">This title already exist. Please try another title</div>
             </div>
           </div>
 

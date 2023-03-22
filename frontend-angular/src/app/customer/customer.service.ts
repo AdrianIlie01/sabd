@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {Customer} from "./customer";
 import {Portfolio} from "../portfolio/portfolio";
-import {AbstractControl, AsyncValidatorFn} from "@angular/forms";
+import {AbstractControl, AsyncValidatorFn, ValidationErrors} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export class CustomerService {
 
   // custom async validator for unique name
   validateName():AsyncValidatorFn  {
-    return (control: AbstractControl) => {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return this.findByName(control.value)
         .pipe(
           map((data) => {
@@ -62,33 +62,16 @@ export class CustomerService {
     }
   }
 
-  nameValidUpdate(id: string): AsyncValidatorFn  {
-    return (control: AbstractControl) => {
-      let customer: Customer[] = [];
-      let validName: boolean = true;
-
-      this.find(id).subscribe((data: Customer[]) => {
-        customer = data;
-      });
-      return this.findByName(control.value)
-        .pipe(
-          map((data) => {
-            data.map((searchCustomer: Customer) => {
-              customer.map((customer:Customer) => {
-                if (!(searchCustomer.id === customer.id)) {
-                  console.log('another customer has this name');
-                  validName = false;
-                } else {
-                  validName = true;
-                }
-              })
-            })
-            return !validName ? {'validateName': 'This name is not available'} : {};
-          })
-        );
+  nameValidUpdate(id: string): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.findByName(control.value).pipe(
+        map((customers: Customer[]) => {
+          const matchingName = customers.filter((customer: Customer) => customer.id !== id);
+          return matchingName.length > 0 ? { 'nameValidUpdate': 'This name already exists. Please try another name' } : null;
+        })
+      );
     }
   }
-
 
   update(id:string, customer:Customer) {
 
