@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     image: mysql:5.7
-    container_name: db
+    container_name: db-2
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: project
@@ -13,7 +13,7 @@ services:
       - "3306:3306"
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: pma
+    container_name: pma2
     links:
       - db
     environment:

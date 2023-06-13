@@ -1,0 +1,29 @@
+<div class="container">
+  <h1>Category List</h1>
+
+  <div class="d-flex justify-content-end">
+    <a href="#" routerLink="/category/create/" class="btn btn-success mx-2">Create New Category</a>
+    <a href="#" routerLink="/category-link/list/" class="btn btn-success">Subcategories List</a>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Category name</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let category of categories">
+      <td>{{ category.id }}</td>
+      <td>{{ category.category_name }}</td>
+      <td>{{ category.description }}</td>
+      <td>
+        <a href="#" [routerLink]="['/category/', category.id, 'edit']" class="btn btn-primary mx-1">Edit</a>
+        <button type="button" (click)="deleteCategory(category.id)" class="btn btn-danger mx-1">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

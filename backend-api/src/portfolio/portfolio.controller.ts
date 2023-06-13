@@ -77,7 +77,6 @@ export class PortfolioController {
                     @Body() createImageDto: CreateImageDto
   ) {
     try {
-
       const upload = await this.portfolioService.uploadImage(id, file, createImageDto);
       return res.status(HttpStatus.OK).json(upload);
     } catch (e) {

@@ -1,0 +1,52 @@
+<body class="d-flex min-vh-100 align-items-center">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-4">
+
+      <div class="text-center">
+        <h1>Create New Category</h1>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <div class="form-floating mb-3">
+          <input
+            formControlName="category_name"
+            id="category_name"
+            type="text"
+            class="form-control"
+            placeholder="category_name"
+            [ngClass]="{'is-invalid':submitted && f['category_name'].errors}"
+          >
+          <label for="category_name">Name</label>
+          <div *ngIf="submitted && f['category_name'].errors" class="text-danger">
+            <div *ngIf="submitted && f['category_name'].errors['required']">Name is required</div>
+            <div *ngIf="submitted && f['category_name'].errors['minlength']">Category name must be at least 3 characters long</div>
+          </div>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input
+            formControlName="description"
+            id="description"
+            type="text"
+            class="form-control"
+            placeholder="description"
+            [ngClass]="{'is-invalid':submitted && f['description'].errors}"
+          >
+          <label for="description">Description</label>
+          <div *ngIf="submitted && f['description'].errors" class="text-danger">
+            <div *ngIf="submitted && f['description'].errors['required']">Description is required</div>
+            <div *ngIf="submitted && f['description'].errors['minlength']">Description must be at least 3 characters long</div>
+          </div>
+        </div>
+
+
+        <div class="form-group col">
+          <button class="btn btn-primary mt-1 col-lg-12" type="submit" >Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
